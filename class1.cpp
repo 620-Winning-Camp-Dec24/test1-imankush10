@@ -1,5 +1,7 @@
 #include <iostream>
 #include<math.h>
+#include <vector>
+
 using namespace std;
 
 class Student
@@ -135,8 +137,103 @@ int calcSalary(int basicStipend, int bonuses, int performanceBonuses)
 	return basicStipend + bonuses + performanceBonuses;
 }
 
+void addAndPrintMatrices(const vector<vector<int>>& mat1, const vector<vector<int>>& mat2) {
+	if (mat1.size() != mat2.size() || mat1[0].size() != mat2[0].size()) {
+		cerr << "Error: Matrix dimensions must match for addition." << endl;
+		return;
+	}
+
+	int rows = mat1.size();
+	int cols = mat1[0].size();
+
+	cout << "Resultant Matrix:" << endl;
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			cout << mat1[i][j] + mat2[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+class Account {
+protected:
+	int balance;
+public:
+	Account(int bal) : balance(bal) {}
+	virtual void calculateInterest() const = 0;
+	virtual ~Account() {}
+};
+
+class SavingsAccount : public Account {
+	double rate;
+	int time;
+public:
+	SavingsAccount(int bal, double r, int t) : Account(bal), rate(r), time(t) {}
+	void calculateInterest() const override {
+		double interest = balance * (rate / 100) * time;
+		cout << fixed;
+		cout << "Savings Account Interest: " << interest << endl;
+	}
+};
+
+class CurrentAccount : public Account {
+	int maintenanceFee;
+public:
+	CurrentAccount(int bal, int fee) : Account(bal), maintenanceFee(fee) {}
+	void calculateInterest() const override {
+		cout << "Current Account Maintenance Fee Deducted: " << maintenanceFee << endl;
+		cout << "Final Balance after Fee Deduction: " << (balance - maintenanceFee) << endl;
+	}
+};
+
+void handleAccount() {
+	int accountType;
+	cout << "Enter Account Type (1 for Savings, 2 for Current): ";
+	cin >> accountType;
+
+	int balance;
+	cout << "Enter Account Balance: ";
+	cin >> balance;
+
+	if (accountType == 1) {
+		double rate;
+		int time;
+		cout << "Enter Interest Rate (as percentage): ";
+		cin >> rate;
+		cout << "Enter Time (in years): ";
+		cin >> time;
+
+		if (balance < 1000 || balance > 1000000 || rate < 1 || rate > 15 || time < 1 || time > 10) {
+			cout << "Invalid input values." << endl;
+			return;
+		}
+
+		SavingsAccount sa(balance, rate, time);
+		sa.calculateInterest();
+	}
+	else if (accountType == 2) {
+		int fee;
+		cout << "Enter Monthly Maintenance Fee: ";
+		cin >> fee;
+
+		if (balance < 1000 || balance > 1000000 || fee < 50 || fee > 500) {
+			cout << "Invalid input values." << endl;
+			return;
+		}
+
+		CurrentAccount ca(balance, fee);
+		ca.calculateInterest();
+	}
+	else {
+		cout << "Invalid account type." << endl;
+	}
+}
+
+
+
 int main()
 {
+	//1st
 	int n;
 	cout << "Sum of numbers upto: ";
 	cin >> n;
@@ -144,11 +241,13 @@ int main()
 	cout << "\nSum: " << naturalSum(n);
 	n = 0;
 
+	//2nd
 	cout << "\nEnter number to find length: ";
 	cin >> n;
 
 	cout << "\nLength: " << numberLength(n);
 
+	//3rd
 	cout << "\nEnter radius: ";
 	cin >> n;
 	cout << "\n" << area(n) << endl;
@@ -165,19 +264,23 @@ int main()
 
 	cout << "\n" << area(a, b, c)<<endl;
 
+	//4th
 	cout << "Enter the number of which you want the table of: ";
 	cin >> n;
 	table(n);
 
 
+	//5th
 	cout << "Enter the number you want to reverse: ";
 	cin >> n;
 	cout<<reversedNum(n);
 
+	//6th
 	cout << "Salary of intern: " << calcSalary(5000)<<endl;
 	cout << "Salary of Employee: " << calcSalary(5000, 2000)<<endl;
 	cout << "Salary of Manager: " << calcSalary(5000, 2000, 8000)<<endl;
 
+	//7th
 	int rollno, marks1, marks2, marks3;
 	string name;
 	cout << "Enter rollno and name: ";
@@ -189,6 +292,7 @@ int main()
 	r.studentInfo();
 	r.calcResult();
 
+	//8th
 	int rad, len, brd, base, height;
 
 	cout << "Enter radius: ";
@@ -210,5 +314,16 @@ int main()
 
 	cout << t.area() << endl;
 
+	//9th
+	vector<vector<int>> mat1 = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
+	vector<vector<int>> mat2 = { {9, 8, 7}, {6, 5, 4}, {3, 2, 1} };
+
+	addAndPrintMatrices(mat1, mat2);
+	
+	//10th
+	handleAccount();
+
 	return 0;
 }
+
+
